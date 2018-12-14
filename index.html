@@ -3,25 +3,28 @@
     <head>
         <meta charset="utf-8">
         <title>Gifs</title>
+        <script src="./javascript/app.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css/style.css">
     </head>
     <body>
+
+        <h1>Comedian Gifs</h1>
                 
         <div id="topic-buttons"></div>
-       
+        <br>
         <form id="input">
             <label for="comedian-input">Add a Comedian</label>
             <input type="text" id="comedian-input">
-            <input id="add-comedian" type="submit" value="Hit it!">
+            <input id="add-comedian" type="submit" value="Hit it">
         </form>
 
         <div id= "gif-images"></div>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         
         <script type="text/javascript">
             
             // array of comedians (topics):
-            var topics = ["Aziz Ansari", "Russel Peters", "Dave Chappelle", "Bert Kreischer", "Kevin Hart" ]
+            var topics = ["Aziz Ansari", "Nick Offerman", "Dave Chappelle", "Bert Kreischer", "Kevin Hart" ]
 
             // function that displays information about comedians:
             function displayComedian () {    

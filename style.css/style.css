@@ -1,0 +1,17 @@
+body {
+    background-color: black;
+    color: yellowgreen;
+}
+
+#input {
+    font-size: 20px;
+}
+
+.comedians{
+    padding: 5px;
+    background-color: teal;
+    color: white;
+    font-size: 12px;
+    margin: 10px;
+    font-weight: bold;
+}
