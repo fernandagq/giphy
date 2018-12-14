@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Gifs</title>
+    </head>
+    <body>
+                
+        <div id="topic-buttons"></div>
+       
+        <form id="input">
+            <label for="comedian-input">Add a Comedian</label>
+            <input type="text" id="comedian-input">
+            <input id="add-comedian" type="submit" value="Hit it!">
+        </form>
+
+        <div id= "gif-images"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+        <script type="text/javascript">
+            
+            // array of comedians (topics):
+            var topics = ["Aziz Ansari", "Russel Peters", "Dave Chappelle", "Bert Kreischer", "Kevin Hart" ]
+
+            // function that displays information about comedians:
+            function displayComedian () {    
+
+                // attributing "data-person" to variable "person"                 
+                var person= $(this).attr("data-person");
+                
+                var key= "UUIsJTJmqlfPxUflr5Mr6j6jKYorrxeo";
+                
+                var queryURL= "https://api.giphy.com/v1/gifs/search?q=" + person + "&api_key=UUIsJTJmqlfPxUflr5Mr6j6jKYorrxeo&limit=10"              
+                
+                // creating an AJAX call that allows information to be retreived when specific button is clicked:
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"     
+                })
+                .then(function(response){
+                                 
+                    var results = response.data;
+                    $("#gif-images").empty();
+                
+                // loop thhat goes through results (information gathered using AJAX called):
+                for (var i=0; i<results.length; i++) {   
+                    // creating a div for gifs:
+                    var gifDiv = $("<div>");
+                    //collecting rating data: 
+                    var rating = results[i].rating;
+                    // creating a paragraph to store rating:
+                    var p = $("<p>");
+                    
+                    p.text("Rating: " + rating);
+                    // creating an image container:
+                    var img = $("<img>");
+                    // attributing source to image and specifying path to retrieve URL, notice the URL retrieved is for a "still" giffy in order to start off with a "still" giffy.
+                    img.attr("src", results[i].images.fixed_height_still.url);
+                    // attributing the data-still URL:
+                    img.attr("data-still", results[i].images.fixed_height_still.url);
+                    //attributing data-animate and the URL to an animated giffy:
+                    img.attr("data-animate", results[i].images.fixed_height.url);
+                    //attributing "still" state to giffy.
+                    img.attr("data-state", "still");
+                    //adding a class to the images in order to reference them all at once when creating a command: 
+                    img.addClass("gif-image");
+                    //creating a command in which the image will animate upon a click and will return to still motion if clicked again.
+                    $(".gif-image").on("click", function(){
+
+                    var state = $(this).attr("data-state");
+
+                    if (state == "still"){
+                        $(this).attr("src", $(this).attr("data-animate"));
+                        $(this).attr("data-state", "animate");
+
+                    } else {
+                        $(this).attr("src", $(this).attr("data-still"));
+
+                        $(this).attr("data-state", "still")
+                        }
+                    });         
+                    //Did this at the beginning to make sure the information was being retrieved correctly through the AJAX call.
+                    console.log(results);
+                    //consolidating the rating and the image in order for them to appear at once.
+                    gifDiv.prepend(p);
+                    gifDiv.prepend(img); 
+                    // dumping consolidated elements into "#gif-images"div:
+                    $("#gif-images").prepend(gifDiv);
+                    //This seems redundant but when I didn't repeat this command, the play/pause effect was only affecting every other image. This way, it applies to all images.
+                    $(".gif-image").on("click", function(){
+
+                    var state = $(this).attr("data-state");
+
+                    if (state == "still"){
+                        $(this).attr("src", $(this).attr("data-animate"));
+                        $(this).attr("data-state", "animate");
+
+                    } else {
+                        $(this).attr("src", $(this).attr("data-still"));
+
+                        $(this).attr("data-state", "still")
+                            }
+                        });                   
+                    }
+                });           
+            }
+        //funciton for button creation
+        function renderButtons () {
+        // emptying button container to avoid repeat buttons
+                $("#topic-buttons").empty();
+        // loop that goes through array of topics
+                for (var i=0; i<topics.length; i++) {
+        // dynamic creation of buttons for each item in the array
+                var topicButtons = $("<button>"); 
+                
+                topicButtons.addClass("comedians");
+
+                topicButtons.attr("data-person", topics[i]);
+
+                topicButtons.text(topics[i]);
+
+                $("#topic-buttons").append(topicButtons);
+            }
+        }    
+        $("#add-comedian").on("click", function(event){
+            event.preventDefault();
+
+            var person = $("#comedian-input").val().trim();
+            topics.push(person);
+            renderButtons();
+        });
+
+        $(document).on("click", ".comedians", displayComedian);
+        renderButtons();
+
+        </script>
+    </body>
+</html>
